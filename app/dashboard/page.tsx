@@ -19,12 +19,12 @@ export default function Dashboard() {
             <div className="flex justify-between">
                 <h1 className="text-3xl font-bold">Invoices</h1>
                 <p>
-                    <Button className='inline-flex gap-2' variant={"ghost"}>
-                        <Link href={"/invoices/new"}>
+                    <Link href={"/invoices/new"}>
+                        <Button className='inline-flex gap-2' variant={"ghost"}>
                             <CirclePlus className='h-4 w-4' />
-                        </Link>
-                        Create Invoice
-                    </Button>
+                            Create Invoice
+                        </Button>
+                    </Link>
                 </p>
             </div>
         <Table>
