@@ -1,19 +1,32 @@
-import { sql } from 'drizzle-orm';
-import { db } from '@/db';
+"use client"
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 import { createAction } from '@/app/actions';
+import { startTransition, SyntheticEvent, useState } from "react";
 
-export default async function Dashboard() {
+export default function Dashboard() {
     // const result = await db.execute(sql`SELECT current_database()`);
+    const [state, setState] = useState('ready')
+    async function handleOnSubmit(event: SyntheticEvent) {
+        event.preventDefault()
+        if (state === 'pending') return;
+        setState('pending');
+        const target = event.target as HTMLFormElement;
+        startTransition(async () => {
+            const formData = new FormData(target);
+            await createAction(formData)
+            console.log("hey")
+        })
+
+    }
     return (
         <main className="pt-18 pl-6 flex flex-col gap-6 h-screen">
             <div className="flex flex-col justify-between">
                 <h1 className="text-3xl font-bold mb-4">Create a New Invoices</h1>
                 {/* {JSON.stringify(result)} */}
-                <form action={createAction} className="grid gap-4 max-w-sm">
+                <form action={createAction} onSubmit={handleOnSubmit} className="grid gap-4 max-w-sm">
                     <div>
                         <Label className="block font-semibold text-sm mb-2" htmlFor="billing_name">Billing Name
                         </Label>
@@ -33,7 +46,7 @@ export default async function Dashboard() {
                         <Textarea id="description" name="description" />
                     </div>
                     <div>
-                        <Button className="w-full font-semibold">Submit</Button>
+                        <SubmitButton />
                     </div>
                 </form>
             </div>
