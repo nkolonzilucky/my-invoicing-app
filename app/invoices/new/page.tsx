@@ -1,14 +1,17 @@
+import { sql } from 'drizzle-orm';
+import { db } from '@/db';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import Link from 'next/link';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+    // const result = await db.execute(sql`SELECT current_database()`);
     return (
         <main className="pt-18 pl-6 flex flex-col gap-6 h-screen">
             <div className="flex flex-col justify-between">
                 <h1 className="text-3xl font-bold mb-4">Create a New Invoices</h1>
+                {/* {JSON.stringify(result)} */}
                 <form className="grid gap-4 max-w-sm">
                     <div>
                         <Label className="block font-semibold text-sm mb-2" htmlFor="billing_name">Billing Name
