@@ -12,10 +12,10 @@ export async function createAction(formData: FormData) {
 
     const results = await db.insert(Invoices).values({
         value,
-        description,
-        status: 'open',
         name,
-        email
+        email,
+        description,
+        status: 'open'
     }).returning({
         id: Invoices.id
     })

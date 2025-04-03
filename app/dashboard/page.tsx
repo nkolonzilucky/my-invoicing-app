@@ -47,17 +47,17 @@ export default async function Dashboard() {
                         <TableRow key={result.id}>
                         <TableCell className="font-medium text-left p-4">
                             <span className="font-semibold">
-                                {result.createTs.getDate()}
+                                {result.createTs.toUTCString()}
                             </span>
                         </TableCell>
                         <TableCell className="text-left p-4">
                             <span className="font-semibold">
-                                Name Unknown
+                                {result.name}
                             </span>
                         </TableCell>
                         <TableCell className="text-left p-4">
                             <span className="font-semibold">
-                                email@nothereyet.com
+                                {result.email}
                             </span>
                         </TableCell>
                         <TableCell className="text-center p-4">
