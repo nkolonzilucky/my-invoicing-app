@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SubmitButton from "@/components/SubmitButton";
+import { Form } from 'next/form';
 import { createAction } from '@/app/actions';
 import { startTransition, SyntheticEvent, useState } from "react";
 
@@ -26,7 +27,7 @@ export default function Dashboard() {
             <div className="flex flex-col justify-between">
                 <h1 className="text-3xl font-bold mb-4">Create a New Invoices</h1>
                 {/* {JSON.stringify(result)} */}
-                <form action={createAction} onSubmit={handleOnSubmit} className="grid gap-4 max-w-sm">
+                <Form onSubmit={handleOnSubmit} className="grid gap-4 max-w-sm">
                     <div>
                         <Label className="block font-semibold text-sm mb-2" htmlFor="billing_name">Billing Name
                         </Label>
@@ -48,7 +49,7 @@ export default function Dashboard() {
                     <div>
                         <SubmitButton />
                     </div>
-                </form>
+                </Form>
             </div>
         </main>
     );
