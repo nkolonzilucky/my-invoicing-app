@@ -47,7 +47,7 @@ export default async function Dashboard() {
                         <TableRow key={result.id}>
                         <TableCell className="font-medium text-left p-4">
                             <span className="font-semibold">
-                                {result.createTs.toUTCString()}
+                                {new Date(result.createTs).toLocaleDateString()}
                             </span>
                         </TableCell>
                         <TableCell className="text-left p-4">
