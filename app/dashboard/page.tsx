@@ -45,30 +45,32 @@ export default async function Dashboard() {
                 {result.map(result => {
                     return (
                         <TableRow key={result.id}>
-                        <TableCell className="font-medium text-left p-4">
-                            <span className="font-semibold">
+                        <TableCell className="font-medium text-left">
+                            <Link href={`/invoices/${result.id}`} className="block font-semibold px-4">
                                 {new Date(result.createTs).toLocaleDateString()}
-                            </span>
+                            </Link>
                         </TableCell>
-                        <TableCell className="text-left p-4">
-                            <span className="font-semibold">
+                        <TableCell className="text-left">
+                            <Link href={`/invoices/${result.id}`} className="block font-semibold px-4">
                                 {result.name}
-                            </span>
+                            </Link>
                         </TableCell>
-                        <TableCell className="text-left p-4">
-                            <span className="font-semibold">
+                        <TableCell className="text-left">
+                            <Link href={`/invoices/${result.id}`} className="block font-semibold px-4">
                                 {result.email}
-                            </span>
+                            </Link>
                         </TableCell>
-                        <TableCell className="text-center p-4">
+                        <TableCell className="text-center">
+                            <Link href={`/invoices/${result.id}`} className='block px-4'>
                             <Badge variant={"outline"} className="bg-black text-white rounded-full">
                                 {result.status}
                             </Badge>
+                            </Link>
                         </TableCell>
-                        <TableCell className="text-right p-4">
-                            <span>
-                                ${result.value / 100}
-                            </span>
+                        <TableCell className="text-right">
+                            <Link href={`/invoices/${result.id}`} className='block px-4'>
+                                ${(result.value / 100).toFixed(2)}
+                            </Link>
                         </TableCell>
                     </TableRow>
                     );
