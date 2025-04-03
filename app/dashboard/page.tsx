@@ -11,9 +11,12 @@ import {
   import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
+import { db } from '@/db';
+import { Invoices } from '@/db/schema';
 
 
-export default function Dashboard() {
+export default async function Dashboard() {
+    const result = await db.select().from(Invoices)
     return (
         <main className="pt-6 pl-6 flex flex-col text-center gap-6 h-screen mx-auto">
             <div className="flex justify-between">
@@ -39,33 +42,38 @@ export default function Dashboard() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow>
-                    <TableCell className="font-medium text-left p-4">
-                        <span className="font-semibold">
-                            10/31/2024
-                        </span>
-                    </TableCell>
-                    <TableCell className="text-left p-4">
-                        <span className="font-semibold">
-                            Philip J. Fry
-                        </span>
-                    </TableCell>
-                    <TableCell className="text-left p-4">
-                        <span className="font-semibold">
-                            fry@planetexpress.com
-                        </span>
-                    </TableCell>
-                    <TableCell className="text-center p-4">
-                        <Badge variant={"outline"} className="bg-black text-white rounded-full">
-                            Open
-                        </Badge>
-                    </TableCell>
-                    <TableCell className="text-right p-4">
-                        <span>
-                            $250.00
-                        </span>
-                    </TableCell>
-                </TableRow>
+                {result.map(result => {
+                    return (
+                        <TableRow key={result.id}>
+                        <TableCell className="font-medium text-left p-4">
+                            <span className="font-semibold">
+                                {result.createTs.getDate()}
+                            </span>
+                        </TableCell>
+                        <TableCell className="text-left p-4">
+                            <span className="font-semibold">
+                                Name Unknown
+                            </span>
+                        </TableCell>
+                        <TableCell className="text-left p-4">
+                            <span className="font-semibold">
+                                email@nothereyet.com
+                            </span>
+                        </TableCell>
+                        <TableCell className="text-center p-4">
+                            <Badge variant={"outline"} className="bg-black text-white rounded-full">
+                                {result.status}
+                            </Badge>
+                        </TableCell>
+                        <TableCell className="text-right p-4">
+                            <span>
+                                ${result.value / 100}
+                            </span>
+                        </TableCell>
+                    </TableRow>
+                    );
+                })}
+                
             </TableBody>
         </Table>
     </main>

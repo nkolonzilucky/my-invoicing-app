@@ -8,6 +8,13 @@
       "when": 1743577260142,
       "tag": "0000_faithful_darkhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743651710016,
+      "tag": "0001_luxuriant_zuras",
+      "breakpoints": true
     }
   ]
 }
