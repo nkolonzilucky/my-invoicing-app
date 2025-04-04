@@ -3,10 +3,15 @@ import { Invoices } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { notFound } from "next/navigation";
 
 export default async function Invoice({ params }: { params: { id: string } }) {
     const { id }  =  await params;
+    if(isNaN(parseInt(id))) {
+        throw new Error('Invalid Invoice Id')
+    }
     const [result] = await db.select().from(Invoices).where(eq(Invoices.id, parseInt(id))).limit(1);
+    if(!result) notFound();
     return (
         <main className="max-w-5xl mx-auto my-12">
             <div className="flex items-center mb-8 gap-4">
