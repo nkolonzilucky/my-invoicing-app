@@ -1,11 +1,10 @@
 
 import Container from './Container';
-import Link from 'next/link';
 
 
  const Footer = () => {
     return (
-        <footer className='mt-6 mb-8'>
+        <footer className='mt-12 mb-8'>
             <Container className='flex justify-between'>
                <p className='text-sm'>Invoicipedia &copy; {new Date().getFullYear()}</p>
                <p className='text-sm'>
