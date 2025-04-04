@@ -5,7 +5,8 @@ const isPublic = createRouteMatcher([
     '/dashboard',
     '/invoices/:id',
     '/invoices/new',
-    '/sign-in(.*)'
+    '/sign-in(.*)',
+    '/sign-up(.*)',
 
 ])
 // const isProtected = createRouteMatcher([
