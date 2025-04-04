@@ -20,10 +20,10 @@ import Container from '@/components/Container';
 export default async function Dashboard() {
     const result = await db.select().from(Invoices)
     return (
-        <main className="pt-6 h-screen">
+        <main className="h-screen">
             <Container>
                 <div className="flex justify-between">
-                    <h1 className="text-3xl font-bold">Invoices</h1>
+                    <h1 className="text-3xl font-bold mb-6">Invoices</h1>
                     <p>
                         <Link href={"/invoices/new"}>
                             <Button className='inline-flex gap-2' variant={"ghost"}>
