@@ -7,14 +7,13 @@ import { cn } from "@/lib/utils";
 export default async function Invoice({ params }: { params: { id: string } }) {
     const { id }  =  await params;
     const [result] = await db.select().from(Invoices).where(eq(Invoices.id, parseInt(id))).limit(1);
-    console.log(`our result: ${result.email}`)
     return (
         <main className="max-w-5xl mx-auto my-12">
             <div className="flex items-center mb-8 gap-4">
                 <h1 className="text-3xl font-semibold" >Invoice #{id}</h1>
                 <Badge className={cn(
-                    "rounded-full",
-                    result.status === 'open' && 'bg-green-500',
+                    "rounded-full capitalize",
+                    result.status === 'open' && 'bg-blue-500',
                     result.status === 'paid' && 'bg-green-600',
                     result.status === 'void' && 'bg-zinc-700',
                     result.status === 'uncollectible' && 'bg-red-600',

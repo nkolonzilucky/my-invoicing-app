@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { db } from '@/db';
 import { Invoices } from '@/db/schema';
+import { cn } from '@/lib/utils';
 
 
 export default async function Dashboard() {
@@ -62,7 +63,14 @@ export default async function Dashboard() {
                         </TableCell>
                         <TableCell className="text-center">
                             <Link href={`/invoices/${result.id}`} className='block px-4'>
-                            <Badge variant={"outline"} className="bg-black text-white rounded-full">
+                            <Badge variant={'outline'} className={cn(
+                                "rounded-full text-white capitalize",
+                                result.status === 'open' && 'bg-blue-500',
+                                result.status === 'paid' && 'bg-green-600',
+                                result.status === 'void' && 'bg-zinc-700',
+                                result.status === 'uncollectible' && 'bg-red-600'
+                                
+                            )}>
                                 {result.status}
                             </Badge>
                             </Link>
