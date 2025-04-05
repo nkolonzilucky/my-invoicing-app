@@ -2,19 +2,22 @@
 
 import { db } from "@/db";
 import { Invoices } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
+
 export async function createAction(formData: FormData) {
+    const {userId} = await auth()
+    console.log("the userId is: ", userId)
     const value = Math.floor(parseFloat(String(formData.get('value')))) * 100; //storing as int
     const description = formData.get('description') as string;
-    const name = formData.get('billing_name');
-    const email = formData.get('billing_email');
+
+    if(!userId) return
 
     const results = await db.insert(Invoices).values({
         value,
-        name,
-        email,
         description,
+        userId,
         status: 'open'
     }).returning({
         id: Invoices.id

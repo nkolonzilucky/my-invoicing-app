@@ -15,6 +15,13 @@
       "when": 1743651710016,
       "tag": "0001_luxuriant_zuras",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743824175064,
+      "tag": "0002_milky_ultron",
+      "breakpoints": true
     }
   ]
 }

@@ -4,8 +4,10 @@ import { eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function Invoice({ params }: { params: { id: string } }) {
+    const user = await currentUser();
     const { id }  =  await params;
     if(isNaN(parseInt(id))) {
         throw new Error('Invalid Invoice Id')
@@ -49,11 +51,11 @@ export default async function Invoice({ params }: { params: { id: string } }) {
                 </li>
                 <li className="flex gap-4">
                     <strong className="block w-28 flex-shrink-0 font-medium text-sm">Billing Name</strong>
-                    <span>{result.name}</span>
+                    <span>{user?.firstName} {user?.lastName}</span>
                 </li>
                 <li className="flex gap-4">
                     <strong className="block w-28 flex-shrink-0 font-medium text-sm">Billing Email</strong>
-                    <span>{result.email}</span>
+                    <span>{user?.emailAddresses[0].emailAddress}</span>
                 </li>
             </ul>
         </main>
