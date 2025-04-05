@@ -1,18 +1,30 @@
 import { db } from "@/db";
 import { Invoices } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default async function Invoice({ params }: { params: { id: string } }) {
     const user = await currentUser();
+    const {userId} = await auth();
+    if(!userId) throw new Error("No userId")
     const { id }  =  await params;
     if(isNaN(parseInt(id))) {
         throw new Error('Invalid Invoice Id')
     }
-    const [result] = await db.select().from(Invoices).where(eq(Invoices.id, parseInt(id))).limit(1);
+
+    const [result] = await db.select()
+    .from(Invoices)
+    .where(
+        and(
+            eq(Invoices.id, parseInt(id)), 
+            eq(Invoices.userId, userId)
+        )
+    )
+    .limit(1);
+
     if(!result) notFound();
     return (
         <main className="max-w-5xl mx-auto my-12">

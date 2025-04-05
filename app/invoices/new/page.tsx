@@ -5,15 +5,16 @@ import { Textarea } from "@/components/ui/textarea";
 import SubmitButton from "@/components/SubmitButton";
 import  Form  from 'next/form';
 import { createAction } from '@/app/actions';
-import { startTransition, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import Container from "@/components/Container";
+import { useUser } from "@clerk/nextjs";
 
-export default function Dashboard() {
+export default function NewInvoice() {
+    const {user} = useUser();
     // const result = await db.execute(sql`SELECT current_database()`);
 
     const [state, setState] = useState('ready')
     async function handleOnSubmit(event: SyntheticEvent) {
-        
         if (state === 'pending') {
             console.log("State is pending")            
             event.preventDefault()
@@ -47,7 +48,9 @@ export default function Dashboard() {
                         <div>
 
                             <Label className="block font-semibold text-sm mb-2" htmlFor="billing_email">Billing Email</Label>
-                            <Input id="billing_email" type="text" name="billing_email" />
+                            <Input id="billing_email" type="text" name="billing_email" 
+                            value={user?.emailAddresses[0].emailAddress}
+                            />
                         </div>
                         <div>
                             <Label className="block font-semibold text-sm mb-2" htmlFor="value">Value</Label>
