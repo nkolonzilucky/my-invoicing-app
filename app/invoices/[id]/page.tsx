@@ -1,10 +1,24 @@
 import { db } from "@/db";
-import { Invoices } from "@/db/schema";
+import { Invoices, Status } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+import Container from "@/components/Container";
+import { Button } from "@/components/ui/button";
+import { updateStatusAction } from "@/app/actions";
+import { AVAILABLE_STATUSES } from "@/data/invoices";
+
+
+
+
 
 export default async function Invoice({ params }: { params: { id: string } }) {
     const user = await currentUser();
@@ -27,8 +41,12 @@ export default async function Invoice({ params }: { params: { id: string } }) {
 
     if(!result) notFound();
     return (
-        <main className="max-w-5xl mx-auto my-12">
-            <div className="flex items-center mb-8 gap-4">
+        <main className="w-full">
+            <Container>
+
+            <div className="flex items-center justify-between mb-8 gap-4">
+                <div>
+
                 <h1 className="text-3xl font-semibold" >Invoice #{id}</h1>
                 <Badge className={cn(
                     "rounded-full capitalize",
@@ -39,8 +57,28 @@ export default async function Invoice({ params }: { params: { id: string } }) {
                 )}>
                     {result.status}
                 </Badge>
+                </div>
                 <p>
-
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant={"outline"}>Change Status</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {AVAILABLE_STATUSES.map((status) => {
+                                return (
+                                    <DropdownMenuItem key={status.id}>
+                                        <form action={updateStatusAction}>
+                                            <input type="hidden" name="id" value={result.id} />
+                                            <input type="hidden" name="status" value={status.label} />
+                                            <button>
+                                                {status.label}
+                                            </button>
+                                        </form>
+                                    </DropdownMenuItem>
+                                )
+                            })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </p>
             </div>
             <p className="text-3xl mb-3">
@@ -70,6 +108,7 @@ export default async function Invoice({ params }: { params: { id: string } }) {
                     <span>{user?.emailAddresses[0].emailAddress}</span>
                 </li>
             </ul>
+            </Container>
         </main>
     );
 }
