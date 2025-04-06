@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { db } from '@/db';
-import { Invoices } from '@/db/schema';
+import { Customers, Invoices } from '@/db/schema';
 import { cn } from '@/lib/utils';
 import Container from '@/components/Container';
 import { auth } from '@clerk/nextjs/server';
@@ -25,9 +25,15 @@ export default async function Dashboard() {
         throw new Error("UserId does not exist")
     }
     const result = await db.select()
-    .from(Invoices)
+    .from(Invoices).innerJoin(Customers, eq(Invoices.customerId, Customers.id))
     .where(eq(Invoices.userId, userId))
 
+    const invoices = result?.map(({ invoices, customers }) => {
+        return {
+            ...invoices,
+            customer: customers
+        }
+    })
 
     return (
         <main className="h-screen">
@@ -55,7 +61,7 @@ export default async function Dashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {result.map(result => {
+                    {invoices.map(result => {
                         return (
                             <TableRow key={result.id}>
                             <TableCell className="font-medium text-left">
@@ -65,12 +71,12 @@ export default async function Dashboard() {
                             </TableCell>
                             <TableCell className="text-left">
                                 <Link href={`/invoices/${result.id}`} className="block font-semibold px-4">
-                                    {result.name}
+                                    {result.customer.name}
                                 </Link>
                             </TableCell>
                             <TableCell className="text-left">
                                 <Link href={`/invoices/${result.id}`} className="block font-semibold px-4">
-                                    {result.email}
+                                    {result.customer.email}
                                 </Link>
                             </TableCell>
                             <TableCell className="text-center">
