@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 
 
 export async function createAction(formData: FormData) {
-    const {userId} = await auth()
+    const {userId, orgId} = await auth()
     
     if(!userId) return
     
@@ -22,17 +22,19 @@ export async function createAction(formData: FormData) {
     const [customer] = await db.insert(Customers).values({
         name,
         email,
-        userId
+        userId,
+        organizationId: orgId || null
     }).returning({
         id: Customers.id
     })
-
+    
     const results = await db.insert(Invoices).values({
         value,
         description,
         userId,
         customerId: customer.id,
-        status: 'open'
+        status: 'open',
+        organizationId: orgId || null
     }).returning({
         id: Invoices.id
     })

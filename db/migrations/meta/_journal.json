@@ -29,6 +29,13 @@
       "when": 1743957841262,
       "tag": "0003_careless_cerise",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1743964980115,
+      "tag": "0004_friendly_killmonger",
+      "breakpoints": true
     }
   ]
 }

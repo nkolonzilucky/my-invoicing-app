@@ -1,4 +1,5 @@
 import {
+    OrganizationSwitcher,
     SignInButton,
     SignUpButton,
     SignedIn,
@@ -14,11 +15,19 @@ import Link from 'next/link';
         <header className='mt-8 mb-12'>
             <Container>
                 <div className='flex justify-between items-center gap-4'>
-                    <p className='font-bold'>
-                        <Link href={'/dashboard'}>
-                        Invoicepedia
-                        </Link>
-                    </p>
+                    <div className='flex items-center gap-4'>
+                        <p className='font-bold'>
+                            <Link href={'/dashboard'}>
+                            Invoicepedia
+                            </Link>
+                        </p>
+                        <span className='text-slate-300'>/</span>
+                        <SignedIn>
+                            <OrganizationSwitcher hidePersonal 
+                            afterCreateOrganizationUrl={"/dashboard"}
+                            />
+                        </SignedIn>
+                    </div>
                     <div>
                         <SignedOut>
                             <SignInButton />
