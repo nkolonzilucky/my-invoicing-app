@@ -59,7 +59,7 @@ export default function Invoice({ invoice }: InvoiceProps) {
             <Container>
 
             <div className="flex items-center justify-between mb-8 gap-4">
-                <div>
+                <div className="flex gap-2 items-center">
 
                 <h1 className="text-3xl font-semibold" >Invoice #{invoice.id}</h1>
                 <Badge className={cn(
