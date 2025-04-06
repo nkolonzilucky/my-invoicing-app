@@ -37,9 +37,8 @@ export async function updateStatusAction(formData: FormData) {
     const id = formData.get('id') as string;
     const status = formData.get('status') as string;
 
-   const result = await db.update(Invoices).set({status}).where(and(eq(Invoices.id, parseInt(id)),eq(Invoices.userId, userId)))
+    await db.update(Invoices).set({status}).where(and(eq(Invoices.id, parseInt(id)),eq(Invoices.userId, userId)))
 
-    console.log(result)
 
     revalidatePath(`/invoices/${id}`, 'page' )
 }

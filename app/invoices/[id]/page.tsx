@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Invoices, Status } from "@/db/schema";
+import { Invoices} from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { updateStatusAction } from "@/app/actions";
 import { AVAILABLE_STATUSES } from "@/data/invoices";
+import { ChevronDown } from 'lucide-react';
 
 
 
@@ -61,7 +62,10 @@ export default async function Invoice({ params }: { params: { id: string } }) {
                 <p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant={"outline"}>Change Status</Button>
+                            <Button className="flex items-center gap-2" variant={"outline"}>
+                                Change Status
+                                <ChevronDown className="w-4 h-auto"/>
+                            </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             {AVAILABLE_STATUSES.map((status) => {
