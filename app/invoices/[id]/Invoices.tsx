@@ -35,6 +35,7 @@ export default function Invoice({ invoice }: InvoiceProps) {
             throw new Error("Am making this fail")
             await updateStatusAction(formData)
         } catch(e) {
+            console.log(e)
             setCurrentStatus(originalStatus)
 
         }

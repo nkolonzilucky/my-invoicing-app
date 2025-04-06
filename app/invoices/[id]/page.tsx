@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { Invoices} from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { auth, currentUser} from "@clerk/nextjs/server";
+import { auth} from "@clerk/nextjs/server";
 import Invoice from "./Invoices";
 
 

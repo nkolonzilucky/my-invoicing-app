@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db";
-import { Invoices, Status } from "@/db/schema";
+import { Invoices } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
