@@ -16,6 +16,16 @@ import { ChevronDown } from 'lucide-react';
 import { useOptimistic } from "react";
 import { Ellipsis } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+  
 
 interface InvoiceProps {
     invoice: typeof Invoices.$inferSelect
@@ -31,6 +41,7 @@ export default function Invoice({ invoice }: InvoiceProps) {
     })
 
     async function handleOnUpdateStatus(formData:  FormData){
+        console.log("Entered the guy")
         const originalStatus = currentStatus;
         setCurrentStatus(formData.get('status'))
         try{       
@@ -73,10 +84,10 @@ export default function Invoice({ invoice }: InvoiceProps) {
                             {AVAILABLE_STATUSES.map((status) => {
                                 return (
                                     <DropdownMenuItem key={status.id}>
-                                        <form action={handleOnUpdateStatus}>
+                                        <form action={updateStatusAction}>
                                             <input type="hidden" name="id" value={invoice.id} />
                                             <input type="hidden" name="status" value={status.id} />
-                                            <button>
+                                            <button type="submit">
                                                 {status.label}
                                             </button>
                                         </form>
@@ -86,25 +97,45 @@ export default function Invoice({ invoice }: InvoiceProps) {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button className="flex items-center gap-2" variant={"outline"}>
-                                <span className="sr-only">More Options</span>
-                                <Ellipsis className="w-4 h-auto"/>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                                    <DropdownMenuItem>
-                                        <form action={deleteInvoiceAction}>
-                                            <input type="hidden" name="id" value={invoice.id} />
+
+                    <Dialog>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="flex items-center gap-2" variant={"outline"}>
+                                    <span className="sr-only">More Options</span>
+                                    <Ellipsis className="w-4 h-auto"/>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                        <DropdownMenuItem>
+                                        <DialogTrigger asChild>
                                             <button className="flex items-center gap-1">
-                                                <Trash2 className="w-4 h-auto" />
+                                                        <Trash2 className="w-4 h-auto" />
                                                 Delete Invoice
-                                            </button>
-                                        </form>
-                                    </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                            </button>    
+                                        </DialogTrigger>
+                                        </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent>
+                            <DialogHeader className="gap-4">
+                                <DialogTitle className="text-2xl text-center">Delete Invoice?</DialogTitle>
+                            <DialogDescription className="text-center">
+                                This action cannot be undone. This will permanently remove your invoice from our servers.
+                            </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter className="flex justify-center">
+                                <form action={deleteInvoiceAction}>
+                                    <input type="hidden" name="id" value={invoice.id} />
+                                    <Button variant={"destructive"} className="flex items-center gap-1">
+                                        <Trash2 className="w-4 h-auto" />
+                                        Yes I am sure
+                                    </Button>
+                                        
+                                </form>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
             <p className="text-3xl mb-3">

@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 
 export async function createAction(formData: FormData) {
     const {userId} = await auth()
-    console.log("the userId is: ", userId)
     const value = Math.floor(parseFloat(String(formData.get('value')))) * 100; //storing as int
     const description = formData.get('description') as string;
 
@@ -31,6 +30,7 @@ export async function createAction(formData: FormData) {
 }
 
 export async function updateStatusAction(formData: FormData) {
+    console.log("Entered the updateStatusAction function")
     const { userId } = await auth()
     if(!userId) return;
 
