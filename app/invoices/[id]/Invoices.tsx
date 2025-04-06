@@ -1,0 +1,117 @@
+"use client"
+import { Invoices} from "@/db/schema";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+import Container from "@/components/Container";
+import { Button } from "@/components/ui/button";
+import { updateStatusAction } from "@/app/actions";
+import { AVAILABLE_STATUSES } from "@/data/invoices";
+import { ChevronDown } from 'lucide-react';
+import { useOptimistic } from "react";
+
+interface InvoiceProps {
+    invoice: typeof Invoices.$inferSelect
+}
+
+
+
+
+export default function Invoice({ invoice }: InvoiceProps) {
+    const [currentStatus, setCurrentStatus] = useOptimistic(invoice.status, (status, newStatus) => {
+        return String(newStatus)
+
+    })
+
+    async function handleOnUpdateStatus(formData:  FormData){
+        const originalStatus = currentStatus;
+        setCurrentStatus(formData.get('status'))
+        try{       
+            throw new Error("Am making this fail")
+            await updateStatusAction(formData)
+        } catch(e) {
+            setCurrentStatus(originalStatus)
+
+        }
+    }
+
+    return (
+        <main className="w-full">
+            <Container>
+
+            <div className="flex items-center justify-between mb-8 gap-4">
+                <div>
+
+                <h1 className="text-3xl font-semibold" >Invoice #{invoice.id}</h1>
+                <Badge className={cn(
+                    "rounded-full capitalize",
+                    currentStatus === 'open' && 'bg-blue-500',
+                    currentStatus === 'paid' && 'bg-green-600',
+                    currentStatus === 'void' && 'bg-zinc-700',
+                    currentStatus === 'uncollectible' && 'bg-red-600',
+                )}>
+                    {currentStatus}
+                </Badge>
+                </div>
+                <p>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="flex items-center gap-2" variant={"outline"}>
+                                Change Status
+                                <ChevronDown className="w-4 h-auto"/>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {AVAILABLE_STATUSES.map((status) => {
+                                return (
+                                    <DropdownMenuItem key={status.id}>
+                                        <form action={handleOnUpdateStatus}>
+                                            <input type="hidden" name="id" value={invoice.id} />
+                                            <input type="hidden" name="status" value={status.id} />
+                                            <button>
+                                                {status.label}
+                                            </button>
+                                        </form>
+                                    </DropdownMenuItem>
+                                )
+                            })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </p>
+            </div>
+            <p className="text-3xl mb-3">
+                {(invoice.value/100).toFixed(2)}
+            </p>
+            <p className="text-lg mb-8">
+                {invoice.description}
+            </p>
+            <h2 className="font-bold text-lg mb-4">
+                Billing Details
+            </h2>
+            <ul className="grid gap-2">
+                <li className="flex gap-4">
+                    <strong className="block w-28 flex-shrink-0 font-medium text-sm">Invoice ID</strong>
+                    <span>{invoice.id}</span>
+                </li>
+                <li className="flex gap-4">
+                    <strong className="block w-28 flex-shrink-0 font-medium text-sm">Invoice Date</strong>
+                    <span>{new Date(invoice.createTs).toLocaleDateString()}</span>
+                </li>
+                <li className="flex gap-4">
+                    <strong className="block w-28 flex-shrink-0 font-medium text-sm">Billing Name</strong>
+                    <span>Name</span>
+                </li>
+                <li className="flex gap-4">
+                    <strong className="block w-28 flex-shrink-0 font-medium text-sm">Billing Email</strong>
+                    <span>Email</span>
+                </li>
+            </ul>
+            </Container>
+        </main>
+    );
+}
