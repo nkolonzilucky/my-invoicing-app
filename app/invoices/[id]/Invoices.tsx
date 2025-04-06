@@ -10,10 +10,12 @@ import {
   } from "@/components/ui/dropdown-menu"
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
-import { updateStatusAction } from "@/app/actions";
+import { updateStatusAction, deleteInvoiceAction } from "@/app/actions";
 import { AVAILABLE_STATUSES } from "@/data/invoices";
 import { ChevronDown } from 'lucide-react';
 import { useOptimistic } from "react";
+import { Ellipsis } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 interface InvoiceProps {
     invoice: typeof Invoices.$inferSelect
@@ -59,7 +61,7 @@ export default function Invoice({ invoice }: InvoiceProps) {
                     {currentStatus}
                 </Badge>
                 </div>
-                <p>
+                <div className="flex gap-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className="flex items-center gap-2" variant={"outline"}>
@@ -83,7 +85,27 @@ export default function Invoice({ invoice }: InvoiceProps) {
                             })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </p>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="flex items-center gap-2" variant={"outline"}>
+                                <span className="sr-only">More Options</span>
+                                <Ellipsis className="w-4 h-auto"/>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                                    <DropdownMenuItem>
+                                        <form action={deleteInvoiceAction}>
+                                            <input type="hidden" name="id" value={invoice.id} />
+                                            <button className="flex items-center gap-1">
+                                                <Trash2 className="w-4 h-auto" />
+                                                Delete Invoice
+                                            </button>
+                                        </form>
+                                    </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
             <p className="text-3xl mb-3">
                 {(invoice.value/100).toFixed(2)}
