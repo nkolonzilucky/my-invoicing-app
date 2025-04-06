@@ -69,7 +69,7 @@ export default async function Invoice({ params }: { params: { id: string } }) {
                                     <DropdownMenuItem key={status.id}>
                                         <form action={updateStatusAction}>
                                             <input type="hidden" name="id" value={result.id} />
-                                            <input type="hidden" name="status" value={status.label} />
+                                            <input type="hidden" name="status" value={status.id} />
                                             <button>
                                                 {status.label}
                                             </button>
