@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
 import { Check } from 'lucide-react';
+import { createPayment } from "@/app/actions";
 
 export default async function Invoice({params}: {params: {id:string}}) { 
     const { id }  =  await params;
@@ -87,7 +88,8 @@ export default async function Invoice({params}: {params: {id:string}}) {
                 <h2 className="text-xl font-bold mb-4">Manage Invoice</h2>
                 {invoice.status === 'open' && (
 
-                    <form action="">
+                    <form action={createPayment}>
+                    <input type="hidden" name="id" value={invoice.id}  />
                     <Button className="flex gap-2 bg-green-700 font-bold">
                         <CreditCard className="w-5 h-auto" />
                         Pay Invoice

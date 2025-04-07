@@ -81,3 +81,8 @@ export async function deleteInvoiceAction(formData: FormData){
     redirect("/dashboard" )
 
 }
+
+export async function createPayment(formData: FormData) {
+    const id = parseInt(formData.get('id') as string);
+
+}
