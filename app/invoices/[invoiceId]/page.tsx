@@ -5,12 +5,17 @@ import { notFound } from "next/navigation";
 import { auth} from "@clerk/nextjs/server";
 import Invoice from "./Invoices";
 import { updateStatusAction } from "@/app/actions";
+import Stripe from "stripe";
 
 
+const stripe = new Stripe(String(process.env.STRIPE_API_SECRET))
 
 interface InvoicePageProps {
     params: { invoiceId: string; }
-    searchParams: { status: string; }
+    searchParams: { 
+        status: string;
+        session_id:string; 
+    }
 }
 
 
@@ -22,14 +27,22 @@ export default async function InvoicePage({ params, searchParams }: InvoicePageP
         throw new Error('Invalid Invoice Id')
     }
 
-    const isSuccess = searchParams.status === 'success';
+    const session_id = searchParams.session_id;
+    const isSuccess = session_id && searchParams.status === 'success';
     const isCanceled = searchParams.status === 'canceled';
+    let isError = !session_id;
 
-    if(isSuccess) {
-        const formData = new FormData();
-        formData.append('id', invoiceId);
-        formData.append('status', 'paid');
-        await updateStatusAction(formData);
+    if(isSuccess ) {
+        const {payment_status} = await stripe.checkout.sessions.retrieve(session_id)
+
+        if(payment_status !== 'paid'){
+            isError = true
+        } else{
+            const formData = new FormData();
+            formData.append('id', invoiceId);
+            formData.append('status', 'paid');
+            await updateStatusAction(formData);
+        }
     }
 
     let result;
@@ -64,8 +77,9 @@ export default async function InvoicePage({ params, searchParams }: InvoicePageP
 
     const invoice = {
         ...result.invoices,
-        customer: result.customers
+        customer: result.customers,
+        isError
     }
 
-   return <Invoice invoice={invoice} />
+   return <Invoice invoice={invoice} isError={isError}/>
 }

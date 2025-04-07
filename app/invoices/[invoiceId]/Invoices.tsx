@@ -31,13 +31,13 @@ import Link from "next/link";
 interface InvoiceProps {
     invoice: typeof Invoices.$inferSelect & {
         customer: typeof Customers.$inferSelect
-    }
+    }, isError: boolean
 }
 
 
 
 
-export default function Invoice({ invoice }: InvoiceProps) {
+export default function Invoice({ invoice, isError }: InvoiceProps) {
     const [currentStatus, setCurrentStatus] = useOptimistic(invoice.status, (status, newStatus) => {
         return String(newStatus)
 
@@ -60,6 +60,10 @@ export default function Invoice({ invoice }: InvoiceProps) {
     return (
         <main className="w-full">
             <Container>
+                {isError && 
+                <p className="bg-red-100 text-red-800 text-center px-3 py-2 rounded-lg mb-6 text-sm">
+                    Something went wrong, please try again.
+                </p>}
 
             <div className="flex items-center justify-between mb-8 gap-4">
                 <div className="flex gap-2 items-center">
