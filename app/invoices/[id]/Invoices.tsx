@@ -119,7 +119,7 @@ export default function Invoice({ invoice }: InvoiceProps) {
                                         </DialogTrigger>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
-                                            <Link href={`/invoice/${invoice.id}/payment`} className="flex items-center gap-1">
+                                            <Link href={`/invoices/${invoice.id}/payment`} className="flex items-center gap-1">
                                                         <CreditCard className="w-4 h-auto" />
                                                 Payment 
                                             </Link>    
