@@ -9,12 +9,43 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CreditCard } from "lucide-react";
 import { Check } from 'lucide-react';
-import { createPayment } from "@/app/actions";
+import { createPayment, updateStatusAction } from "@/app/actions";
+import Stripe from "stripe";
 
-export default async function Invoice({params}: {params: {id:string}}) { 
-    const { id }  =  await params;
-    if(isNaN(parseInt(id))) {
+const stripe = new Stripe(String(process.env.STRIPE_API_SECRET))
+
+interface InvoicePageProps {
+    params: { invoiceId: string; }
+    searchParams: { 
+        status: string;
+        session_id:string; 
+    }
+}
+
+export default async function Invoice({ params, searchParams }: InvoicePageProps) { 
+    const invoiceId  =  parseInt(params.invoiceId);
+
+    const session_id = searchParams.session_id;
+    const isSuccess = session_id && searchParams.status === 'success';
+    const isCanceled = searchParams.status === 'canceled';
+    let isError = isSuccess && !session_id;
+
+    if(isNaN(invoiceId)) {
         throw new Error('Invalid Invoice Id')
+    }
+
+       
+    if(isSuccess ) {
+        const {payment_status} = await stripe.checkout.sessions.retrieve(session_id)
+
+        if(payment_status !== 'paid'){
+            isError = true
+        } else{
+            const formData = new FormData();
+            formData.append('id', String(invoiceId));
+            formData.append('status', 'paid');
+            await updateStatusAction(formData);
+        }
     }
 
     const [result] = await db.select({
@@ -27,7 +58,7 @@ export default async function Invoice({params}: {params: {id:string}}) {
     })
     .from(Invoices)
     .innerJoin(Customers, eq(Invoices.customerId, Customers.id))
-    .where(eq(Invoices.id, parseInt(id)))
+    .where(eq(Invoices.id, invoiceId))
     .limit(1);
 
     if(!result) notFound();
@@ -41,6 +72,14 @@ export default async function Invoice({params}: {params: {id:string}}) {
     return (
         <main className="w-full">
             <Container>
+            {isError && 
+                <p className="bg-red-100 text-red-800 text-center px-3 py-2 rounded-lg mb-6 text-sm">
+                    Something went wrong, please try again.
+                </p>}
+            {isCanceled && 
+                <p className="bg-yellow-100 text-yellow-800 text-center px-3 py-2 rounded-lg mb-6 text-sm">
+                    Payment was canceled, please try again.
+                </p>}
             <div className="grid grid-cols-2">
             <div>
             <div className="flex items-center justify-between mb-8 gap-4">
