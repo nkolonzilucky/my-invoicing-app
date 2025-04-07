@@ -30,7 +30,6 @@ export default async function Invoice({params}: {params: {id:string}}) {
     .where(eq(Invoices.id, parseInt(id)))
     .limit(1);
 
-    console.log("results are Not found")
     if(!result) notFound();
     const invoice = {
         ...result,
