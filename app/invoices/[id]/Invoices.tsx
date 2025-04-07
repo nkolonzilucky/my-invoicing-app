@@ -12,7 +12,7 @@ import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { updateStatusAction, deleteInvoiceAction } from "@/app/actions";
 import { AVAILABLE_STATUSES } from "@/data/invoices";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, CreditCard } from 'lucide-react';
 import { useOptimistic } from "react";
 import { Ellipsis } from 'lucide-react';
 import { Trash2 } from 'lucide-react';
@@ -25,6 +25,7 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
+import Link from "next/link";
   
 
 interface InvoiceProps {
@@ -116,6 +117,12 @@ export default function Invoice({ invoice }: InvoiceProps) {
                                                 Delete Invoice
                                             </button>    
                                         </DialogTrigger>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <Link href={`/invoice/${invoice.id}/payment`} className="flex items-center gap-1">
+                                                        <CreditCard className="w-4 h-auto" />
+                                                Payment 
+                                            </Link>    
                                         </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

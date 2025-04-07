@@ -6,7 +6,10 @@ import { auth } from "@clerk/nextjs/server";
 import { and, eq, isNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import Stripe from 'stripe';
 
+
+const stripe = new Stripe(String(process.env.STRIPE_API_SECRET));
 
 export async function createAction(formData: FormData) {
     const {userId, orgId} = await auth()

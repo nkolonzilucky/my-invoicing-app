@@ -4,7 +4,7 @@ const isPublic = createRouteMatcher([
     '/',
     '/dashboard',
     // '/invoices/:id',
-    // '/invoices/new',
+    '/invoices/(.*)/payment',
     '/sign-in(.*)',
     '/sign-up(.*)',
 
