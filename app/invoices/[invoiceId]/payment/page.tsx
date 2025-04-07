@@ -23,7 +23,7 @@ interface InvoicePageProps {
 }
 
 export default async function Invoice({ params, searchParams }: InvoicePageProps) { 
-    const invoiceId  =  parseInt(params.invoiceId);
+    const invoiceId  =  parseInt(await params.invoiceId);
 
     const session_id = searchParams.session_id;
     const isSuccess = session_id && searchParams.status === 'success';
